@@ -1,5 +1,4 @@
 import random
-import pygame  # noqa
 
 
 class Game:
@@ -15,9 +14,31 @@ class Game:
     def __repr__(self):
         return f"Game {self.game}"
 
-# method for read the map.txt
+    def message(self):
+        return "il reste"
+
+    def message_2(self):
+        return "items"
+
+    def and_message(self):
+        if self.player.position == self.boss.position:
+            if self.player.fight():
+                return "j'ai gagné"
+            else:
+                return "j'ai perdu"
+
+    def count_missing_items(self):
+        return len(([1 for item in self.items if not item.is_taken]))
+
+    def position_to_coordinate(self, position, offset):
+        x = position // self.width
+        y = position % self.width
+        return (y*offset, x*offset)
 
     def load_map(self):
+        """
+    method for read the map.txt
+        """
         file = open('map.txt', "r")
 
         lines = file.readlines()
@@ -44,9 +65,10 @@ class Game:
                     continue
                 index += 1
 
-# method to randomly diplay items
-
     def random_items(self):
+        """
+        method to randomly diplay items
+        """
         place_disponible = []
 
         for i, box in enumerate(self.list_box):
@@ -74,76 +96,85 @@ class Game:
                 line += "W"
             else:
                 line += "B"
-            if (i + 1) % 15 == 0:
+            if (i + 1) % self.width == 0:
                 line += "\n"
-        print(line)
 
-# method to know if we are in a BLACK or WHITE position
     def black_position(self, position):
+        """
+        method to know if we are in a BLACK or WHITE position
+        """
         return self.list_box[position].box_type == "BLACK"
 
-# method to verify if player have take all items and if he have won
     def check_game(self):
-
+        """
+        method to verify if player have take all items and if he have won
+        """
         for item in self.items:
             if self.player.position == item.position and not item.is_taken:
                 self.player.add_item(item)
-                print("j'ai récupéré l'item", item)
         if self.player.position == self.boss.position:
             if self.player.fight():
-                print("j'ai gagné")
+                return "j'ai gagné"
             else:
-                print("j'ai perdu")
+                return "j'ai perdu"
 
     def move_right(self):
-        # We check if we can move right and if this is a black position or not
+        """
+        We check if we can move right and if this is a black position or not
+        """
         new_position = self.player.position + 1
 
         if self.player.position % self.width != 0 and self.black_position(new_position):  # noqa
             self.player.position = new_position
-        self.check_game()
 
     def move_left(self):
-        # We check if we can move left and if this is a black position or not
+        """
+        We check if we can move left and if this is a black position or not
+        """
         new_position = self.player.position - 1
 
         if (self.player.position - 1) % self.width != 0 and self.black_position(new_position):  # noqa
             self.player.position = new_position
-        self.check_game()
 
     def move_down(self):
-        # We check if we can move down and if this is a black position or not
-        new_position = self.player.position+self.width
+        """
+        We check if we can move down and if this is a black position or not
+        """
+        new_position = self.player.position + self.width
 
         if new_position < (self.width*self.width) and self.black_position(new_position):  # noqa
             self.player.position += self.width
-        self.check_game()
 
     def move_up(self):
-        # We check if we can move up and if this is a black position or not
+        """
+        We check if we can move up and if this is a black position or not
+        """
         new_position = self.player.position-self.width
 
         if new_position > 0 and self.black_position(new_position):
             self.player.position = new_position
-        self.check_game()
 
 
 class Player:
     def __init__(self, position):
         self.position = position
         self.items = []
+        self.score_item = []
 
     def __repr__(self):
         return f"Player {self.position}"
 
-# method to add items in a list when the player is in the same position as them
     def add_item(self, item):
+        """
+        method to add items in a list when the player is in the same position as them # noqa
+        """
         self.items.append(item)
         item.is_taken = True
 
-# if player have the 3 items he can fight with the boss and win
     def fight(self):
-        print(self.items)
+        """
+        if player have the 3 items he can fight with the boss and win
+        """
         return len(self.items) == 3
 
     def in_position(self, position):
@@ -163,8 +194,10 @@ class Item:
 
 class Box:
     def __init__(self, box_type):
+        """
+        instance of black or white box
+        """
         self.box_type = box_type
-    # instance of black or white box
 
     def __repr__(self):
         return f"Object {self.box_type}"
@@ -182,23 +215,3 @@ class Boss:
 
     def in_position(self, position):
         return self.position == position
-
-# game = Game()  # noqa
-# game.display_game()  # noqa
-# game.__dict__  # noqa
-
-# run = True  # noqa
-
-# while run:  # noqa
-    # letter = input("entrer votre touche")  # noqa
-    # if letter == "x":  # noqa
-        # run = False  # noqa
-    # if letter == "z":  # noqa
-        # game.move_up()  # noqa
-    # if letter == "d":  # noqa
-        # game.move_right()  # noqa
-    # if letter == "q":  # noqa
-        # game.move_left()  # noqa
-    # if letter == "s":  # noqa
-        # game.move_down()  # noqa
-    # game.display_game()  # noqa
