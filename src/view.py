@@ -2,101 +2,123 @@ import pygame
 from models import Game
 
 rect = pygame.Rect(20, 20, 20, 20)
-
-class GameView:
-    """docstring for GameView"""
-    def __init__(self):
-        self.box_image = get_image("floor-tiles-20x20.png")
-
-        
-def get_image(file, scale=False):
-    """
-get_image function for add a image without repeat everytime the same sentence
-    """
-    file = f"src/macgyver_ressources/ressource/{file}"
-    image = pygame.image.load(file)
-    if scale:
-        image = pygame.transform.scale(image, (20, 20))
-    return image
-
-
-box_image = get_image("floor-tiles-20x20.png")
-
-player_image = get_image("MacGyver.png", True)
-
-ether_image = get_image("ether.png", True)
-
-tube_plastic = get_image("tube_plastic.png", True)
-
-aiguille_image = get_image("aiguille.png", True)
-
-boss_image = get_image("Gardien.png", True)
-
-
 OFFSET = 20
 FPS = 10
 FPSCLDCK = pygame.time.Clock()
 
 
-def display_game(game, screen):
+class GameView:
+    """"""
 
-    for i, box in enumerate(game.list_box):
-        if box.is_black():
-            screen.blit(box_image, game.position_to_coordinate(i, OFFSET), rect) # noqa
+    def __init__(self):
+        self.game = Game()
+        self.box_image = self.get_image("floor-tiles-20x20.png")
+        self.player_image = self.get_image("MacGyver.png", True)
+        self.ether_image = self.get_image("ether.png", True)
+        self.tube_plastic = self.get_image("tube_plastic.png", True)
+        self.aiguille_image = self.get_image("aiguille.png", True)
+        self.boss_image = self.get_image("Gardien.png", True)
+        pygame.init()
+        pygame.display.set_caption("Help Mcgyver")
+        self.screen = pygame.display.set_mode(
+            (self.game.width * OFFSET, self.game.width * OFFSET + 25)
+        )  # noqa
+        background = pygame.Surface(self.screen.get_size())
+        background = background.convert()
+        background.fill((41, 36, 33))
+        self.background = background
 
-        if i == game.items[0].position and not game.items[0].is_taken:
-            screen.blit(ether_image, game.position_to_coordinate(i, OFFSET))
+    def get_image(self, file, scale=False):
+        """
+        get_image function for add a image
+        """
+        file = f"src/macgyver_ressources/ressource/{file}"
+        image = pygame.image.load(file)
+        if scale:
+            image = pygame.transform.scale(image, (20, 20))
+        return image
 
-        elif i == game.items[1].position and not game.items[1].is_taken:
-            screen.blit(tube_plastic, game.position_to_coordinate(i, OFFSET))
+    def display_game(self):
+        self.screen.blit(self.background, (0, 0))
+        blue = (255, 255, 255)
+        arial_font = pygame.font.SysFont("arial", 20)
 
-        elif i == game.items[2].position and not game.items[2].is_taken:
-            screen.blit(aiguille_image, game.position_to_coordinate(i, OFFSET))
+        for i, box in enumerate(self.game.list_box):
+            if box.is_black():
+                self.screen.blit(
+                    self.box_image, self.game.position_to_coordinate(
+                        i, OFFSET
+                    ), rect
+                )
+
+            if i == self.game.items[0].position and not self.game.items[0].is_taken: # noqa
+                self.screen.blit(
+                    self.ether_image, self.game.position_to_coordinate(
+                        i, OFFSET
+                    )
+                )
+
+            elif i == self.game.items[1].position and not self.game.items[1].is_taken: # noqa
+                self.screen.blit(
+                    self.tube_plastic, self.game.position_to_coordinate(
+                        i, OFFSET
+                    )
+                )
+
+            elif i == self.game.items[2].position and not self.game.items[2].is_taken: # noqa
+                self.screen.blit(
+                    self.aiguille_image, self.game.position_to_coordinate(
+                        i, OFFSET
+                    )
+                )
+
+        self.screen.blit(
+            self.player_image,
+            self.game.position_to_coordinate(
+                self.game.player.position, OFFSET
+            ),
+        )
+        self.screen.blit(
+            self.boss_image,
+            self.game.position_to_coordinate(self.game.boss.position, OFFSET),
+        )
+
+        items_display = arial_font.render(
+            str(self.game.count_missing_items()), True, blue
+        )
+        self.screen.blit(items_display, (55, 300))
+
+        message_display = arial_font.render(
+            str(self.game.message()), True, blue
+        )
+        self.screen.blit(
+            message_display, self.game.position_to_coordinate(15, 300)
+        )
+
+        message_2_display = arial_font.render(
+            str(self.game.message_2()), True, blue
+        )  # noqa
+        self.screen.blit(message_2_display, (75, 300))
+
+        and_message_display = arial_font.render(
+            self.game.and_message(), True, blue
+        )  # noqa
+        self.screen.blit(and_message_display, (125, 300))
 
 
 def main():
-    game = Game()
-
-    pygame.init()
-
-    pygame.display.set_caption("Help Mcgyver")
-    screen = pygame.display.set_mode((game.width*OFFSET, game.width*OFFSET + 25)) # noqa
-
-    background = pygame.Surface(screen.get_size())
-    background = background.convert()
-    background.fill((41, 36, 33))
-    blue = (255, 255, 255)
-    arial_font = pygame.font.SysFont("arial", 20)
+    game_view = GameView()
+    game = game_view.game
     running = True
 
     while running:
         """
         infinite loop as long as this condition is true
         """
-        screen.blit(background, (0, 0))
-        display_game(game, screen)
+        game_view.display_game()
         """
-        apply the background of the surface
+        apply the background of the surface and display the game
         """
-        screen.blit(
-            player_image, game.position_to_coordinate(
-            game.player.position, OFFSET
-            )
-        ) # noqa
-        screen.blit(boss_image, game.position_to_coordinate(game.boss.position, OFFSET)) # noqa
-
-        items_display = arial_font.render(str(game.count_missing_items()), True, blue) # noqa
-        screen.blit(items_display, (55, 300))
-
-        message_display = arial_font.render(str(game.message()), True, blue)
-        screen.blit(message_display, game.position_to_coordinate(15, 300))
-
-        message_2_display = arial_font.render(str(game.message_2()), True, blue) # noqa
-        screen.blit(message_2_display, (75, 300))
-
-        and_message_display = arial_font.render(game.and_message(), True, blue) # noqa
-        screen.blit(and_message_display, (125, 300))
-
         for event in pygame.event.get():
             """
             if the player closes the window

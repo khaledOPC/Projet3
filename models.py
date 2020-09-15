@@ -138,7 +138,7 @@ class Game:
 
     def move_down(self):
         """
-        We check if we can move down and if this is a black position or not
+        We check if we can move down and if this is a black position
         """
         new_position = self.player.position + self.width
 

@@ -33,13 +33,13 @@ class Game:
     def position_to_coordinate(self, position, offset):
         x = position // self.width
         y = position % self.width
-        return (y*offset, x*offset)
+        return (y * offset, x * offset)
 
     def load_map(self):
         """
-    method for read the map.txt
+        method for read the map.txt
         """
-        file = open('map.txt', "r")
+        file = open("map.txt", "r")
 
         lines = file.readlines()
 
@@ -72,7 +72,11 @@ class Game:
         place_disponible = []
 
         for i, box in enumerate(self.list_box):
-            if box.is_black() and not self.player.in_position(i) and not self.boss.in_position(i):  # noqa
+            if (
+                box.is_black()
+                and not self.player.in_position(i)
+                and not self.boss.in_position(i)
+            ):  # noqa
                 place_disponible.append(i)
         x = random.sample(place_disponible, k=3)
         self.items.append(Item(position=x[0], name="Ether"))
@@ -124,7 +128,9 @@ class Game:
         """
         new_position = self.player.position + 1
 
-        if self.player.position % self.width != 0 and self.black_position(new_position):  # noqa
+        if self.player.position % self.width != 0 and self.black_position(
+            new_position
+        ):  # noqa
             self.player.position = new_position
 
     def move_left(self):
@@ -133,7 +139,9 @@ class Game:
         """
         new_position = self.player.position - 1
 
-        if (self.player.position - 1) % self.width != 0 and self.black_position(new_position):  # noqa
+        if (self.player.position - 1) % self.width != 0 and self.black_position(
+            new_position
+        ):  # noqa
             self.player.position = new_position
 
     def move_down(self):
@@ -142,14 +150,16 @@ class Game:
         """
         new_position = self.player.position + self.width
 
-        if new_position < (self.width*self.width) and self.black_position(new_position):  # noqa
+        if new_position < (self.width * self.width) and self.black_position(
+            new_position
+        ):  # noqa
             self.player.position += self.width
 
     def move_up(self):
         """
         We check if we can move up and if this is a black position or not
         """
-        new_position = self.player.position-self.width
+        new_position = self.player.position - self.width
 
         if new_position > 0 and self.black_position(new_position):
             self.player.position = new_position
@@ -182,7 +192,6 @@ class Player:
 
 
 class Item:
-
     def __init__(self, name, position, is_taken=False):
         self.position = position
         self.is_taken = is_taken
