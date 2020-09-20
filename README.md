@@ -1,4 +1,4 @@
-# -	1ère étape
+# 1ère étape
 
 - Créer un virtualenv et lancez les commandes suivantes !
 - Installation de pygame avec pip install « pygame ». (Pour la partie graphique du jeu)
