@@ -1,6 +1,6 @@
 # Introduction
 - Aidez Mcgyver à s'échaper dans se jeu. Il y'a un une sereingue, de l'ether et un tube sur la map.
-Trouvez les 3 items battez le gardien. Ensuite vous pourrez quitter le jeu. Bonne chance !
+Trouvez les 3 items puis battez le gardien. Ensuite vous pourrez quitter le jeu. Bonne chance !
 
 # Environnement testé
 - Windows10
