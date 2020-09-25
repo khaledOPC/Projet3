@@ -12,9 +12,11 @@
 - J’ai organisé mon code en plusieurs dossiers et fichiers pour une meilleur compréhension du jeu et de ses étapes 
 
 # On démarre avec la Programmation orientée objet (POO) !
-
-- J’ai organisé mon code en plusieurs classes.
+- J'ai créé un fichier models.py
+- Dans ce fichier, j’ai organisé mon code en plusieurs classes.
 - J’ai pensé à des noms de Classes de méthodes et d’attributs bien compréhensible pour faciliter la lecture du code.
+- La difficulté que j'ai pu rencontrer est d'analyser tout ce dont j'allais avoir besoin en termes de méthodes et d’attributs.
+Pour y remédié j’ai posé sur graphique petite à petit les classes avec des méthodes que j’ai relié entre eux .. voir :
 
 # On démarre maintenant avec la partie pygame !
 - J’ai créé un nouveau fichier .py main.py
